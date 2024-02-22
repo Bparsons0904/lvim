@@ -76,4 +76,13 @@ lvim.builtin.treesitter.ensure_installed = {
 }
 lvim.builtin.treesitter.highlight.enabled = true
 
+
+lvim.builtin.which_key.mappings["f"] = {
+  "<cmd>lua require('telescope.builtin').find_files()<CR>", "Find Files"
+}
+
+lvim.builtin.which_key.mappings["sf"] = {
+  "<cmd>lua require('telescope.builtin').git_files()<CR>", "Git Files"
+}
+
 vim.opt.relativenumber = true
