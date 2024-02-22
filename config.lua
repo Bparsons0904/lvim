@@ -13,24 +13,33 @@ lvim.plugins = {
     ft = { "markdown" },
   },
   {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
+    "windwp/nvim-ts-autotag",
     config = function()
-      require("copilot").setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
+      require("nvim-ts-autotag").setup()
     end,
-  }
-  ,
+  },
   {
-    "zbirenbaum/copilot-cmp",
-    config = function()
-      require("copilot_cmp").setup()
-    end
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    event = "BufRead",
   },
 }
+
+table.insert(lvim.plugins, {
+  "zbirenbaum/copilot-cmp",
+  event = "InsertEnter",
+  dependencies = { "zbirenbaum/copilot.lua" },
+  config = function()
+    vim.defer_fn(function()
+      require("copilot").setup()     -- https://github.com/zbirenbaum/copilot.lua/blob/master/README.md#setup-and-configuration
+      require("copilot_cmp").setup() -- https://github.com/zbirenbaum/copilot-cmp/blob/master/README.md#configuration
+    end, 100)
+  end,
+})
+
+lvim.builtin.telescope.on_config_done = function(telescope)
+  pcall(telescope.load_extension, "frecency")
+  pcall(telescope.load_extension, "neoclip")
+end
 
 -- Keybindings
 -- Insert mode bindings
@@ -67,11 +76,4 @@ lvim.builtin.treesitter.ensure_installed = {
 }
 lvim.builtin.treesitter.highlight.enabled = true
 
--- Vim Settings
-vim.opt.spell = true
-vim.opt.spelllang = 'en_us'
-vim.opt.spelloptions = 'camel'
-
 vim.opt.relativenumber = true
-
-vim.cmd [[autocmd FileType javascriptreact,typescriptreact syntax spell toplevel]]
