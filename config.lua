@@ -91,9 +91,14 @@ lvim.plugins = {
         require("copilot_cmp").setup() -- https://github.com/zbirenbaum/copilot-cmp/blob/master/README.md#configuration
       end, 100)
     end,
+  }, {
+  "olexsmir/gopher.nvim"
+},
+  {
+    "leoluz/nvim-dap-go"
   }
 
-
+  --  "olexsmir/gopher.nvim", "leoluz/nvim-dap-go",
 }
 
 -- table.insert(lvim.plugins, {
@@ -157,6 +162,7 @@ lvim.builtin.treesitter.ensure_installed = {
   "java",
   "yaml",
   "go",
+  "gomod"
 }
 lvim.builtin.treesitter.highlight.enabled = true
 lvim.transparent_window = true
@@ -212,18 +218,17 @@ linters.setup {
 }
 
 -- Go Specific Settings
-lvim.builtin.treesitter.ensure_installed = {
-  "go",
-  "gomod",
-}
+-- lvim.builtin.treesitter.ensure_installed = {
+--   "go",
+--   "gomod",
+-- }
 
 ------------------------
 -- Plugins
 ------------------------
-lvim.plugins = {
-  "olexsmir/gopher.nvim",
-  "leoluz/nvim-dap-go",
-}
+-- lvim.plugins = {
+--  "olexsmir/gopher.nvim", "leoluz/nvim-dap-go",
+-- }
 
 ------------------------
 -- Formatting
