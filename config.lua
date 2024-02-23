@@ -1,7 +1,3 @@
--- Read the docs: https://www.lunarvim.org/docs/configuration
--- Video Tutorials: https://www.youtube.com/watch?v=sFA9kX-Ud_c&list=PLhoH5vyxr6QqGu0i7tt_XoVK9v-KvZ3m6
--- Forum: https://www.reddit.com/r/lunarvim/
--- Discord: https://discord.com/invite/Xb9B4Ny
 lvim.plugins = {
   {
     "iamcco/markdown-preview.nvim",
@@ -12,24 +8,6 @@ lvim.plugins = {
     end,
     ft = { "markdown" },
   },
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   cmd = "Copilot",
-  --   event = "InsertEnter",
-  --   config = function()
-  --     require("copilot").setup({
-  --       suggestion = { enabled = false },
-  --       panel = { enabled = false },
-  --     })
-  --   end,
-  -- }
-  -- ,
-  -- {
-  --   "zbirenbaum/copilot-cmp",
-  --   config = function()
-  --     require("copilot_cmp").setup()
-  --   end
-  -- },
   {
     "windwp/nvim-ts-autotag",
     config = function()
@@ -45,41 +23,22 @@ lvim.plugins = {
     build =
     'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
   },
-  -- {
-  --   "tzachar/cmp-tabnine",
-  --   build = "./install.sh",
-  --   dependencies = "hrsh7th/nvim-cmp",
-  --   event = "InsertEnter",
-  -- },
   {
     "tpope/vim-surround",
-
-    -- make sure to change the value of `timeoutlen` if it's not triggering correctly, see https://github.com/tpope/vim-surround/issues/117
-    -- setup = function()
-    --  vim.o.timeoutlen = 500
-    -- end
   },
-  {
-    "karb94/neoscroll.nvim",
-    event = "WinScrolled",
-    config = function()
-      require('neoscroll').setup({
-        -- All these keys will be mapped to their corresponding default scrolling animation
-        mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>',
-          '<C-y>', '<C-e>', 'zt', 'zz', 'zb' },
-        hide_cursor = true,          -- Hide cursor while scrolling
-        stop_eof = true,             -- Stop at <EOF> when scrolling downwards
-        use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
-        respect_scrolloff = false,   -- Stop scrolling when the cursor reaches the scrolloff margin of the file
-        cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
-        easing_function = nil,       -- Default easing function
-        pre_hook = nil,              -- Function to run before the scrolling animation starts
-        post_hook = nil,             -- Function to run after the scrolling animation ends
-      })
-    end
-  },
+  -- make sure to change the value of `timeoutlen` if it's not triggering correctly, see https://github.com/tpope/vim-surround/issues/117
+  -- setup = function()
+  --  vim.o.timeoutlen = 500
+  -- end
   {
     "davidmh/cspell.nvim",
+    -- config = function()
+    --   require("cspell").setup({
+    --     find_json = function()
+    --       return "~/.config/lvim/"
+    --     end
+    --   })
+    -- end,
   },
   {
     "zbirenbaum/copilot-cmp",
@@ -91,14 +50,34 @@ lvim.plugins = {
         require("copilot_cmp").setup() -- https://github.com/zbirenbaum/copilot-cmp/blob/master/README.md#configuration
       end, 100)
     end,
-  }, {
-  "olexsmir/gopher.nvim"
-},
+  },
+  {
+    "olexsmir/gopher.nvim"
+  },
   {
     "leoluz/nvim-dap-go"
+  },
+  {
+    'kevinhwang91/nvim-hlslens',
+    config = function()
+      require("scrollbar.handlers.search").setup({
+        -- hlslens config overrides
+      })
+      -- require('hlslens').setup()
+    end
+  },
+  {
+    "petertriho/nvim-scrollbar",
+    config = function()
+      require("scrollbar").setup()
+      -- require("nvim-scrollbar").setup({
+      -- auto_hide = true,
+      -- auto_hide_timeout = 1000,
+      -- auto_hide_lastline = true,
+      -- require("scrollbar.handlers.search").setup({}),
+      -- })
+    end,
   }
-
-  --  "olexsmir/gopher.nvim", "leoluz/nvim-dap-go",
 }
 
 -- table.insert(lvim.plugins, {
@@ -112,6 +91,7 @@ lvim.plugins = {
 --     end, 100)
 --   end,
 -- })
+-- Add require("scrollbar").setup() to the gitsignts install
 
 lvim.builtin.telescope.on_config_done = function(telescope)
   pcall(telescope.load_extension, "frecency")
@@ -121,12 +101,27 @@ lvim.builtin.telescope.on_config_done = function(telescope)
 end
 
 -- Keybindings
+lvim.keys.normal_mode["n"] = [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]]
+lvim.keys.normal_mode["N"] = [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]]
+lvim.keys.normal_mode["*"] = [[*<Cmd>lua require('hlslens').start()<CR>]]
+lvim.keys.normal_mode["#"] = [[#<Cmd>lua require('hlslens').start()<CR>]]
+lvim.keys.normal_mode["g*"] = [[g*<Cmd>lua require('hlslens').start()<CR>]]
+lvim.keys.normal_mode["g#"] = [[g#<Cmd>lua require('hlslens').start()<CR>]]
+
+
+
+
 -- Insert mode bindings
 lvim.keys.insert_mode["jk"] = "<Esc>"
 lvim.keys.insert_mode["kj"] = "<Esc>"
 
+-- Center after movements
+lvim.keys.normal_mode["<C-d>"] = "<C-d>zz"
+lvim.keys.normal_mode["<C-u>"] = "<C-u>zz"
+lvim.keys.normal_mode["<C-f>"] = "<C-f>zz"
+lvim.keys.normal_mode["<C-b>"] = "<C-b>zz"
 
--- Normal mode bindings
+-- Normal mode bindin
 -- Save on cmd+s and ctrl+s
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<Cmd-s>"] = ":w<cr>"
@@ -173,6 +168,7 @@ vim.opt.spelllang = 'en_us'
 vim.opt.spelloptions = 'camel'
 
 vim.opt.relativenumber = true
+vim.opt.scrolloff = 8
 
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
@@ -182,9 +178,9 @@ formatters.setup {
     ---@usage arguments to pass to the formatter
     -- these cannot contain whitespace
     -- options such as `--line-width 80` become either `{"--line-width", "80"}` or `{"--line-width=80"}`
-    args = { "--print-width", "100" },
+    -- args = { "--print-width", "100" },
     ---@usage only start in these filetypes, by default it will attach to all filetypes it supports
-    filetypes = { "javascript", "typescript", "typescriptreact" },
+    filetypes = { "css", "javascript", "typescript", "typescriptreact" },
   },
   { command = "goimports", filetypes = { "go" } },
   { command = "gofumpt",   filetypes = { "go" } },
@@ -206,15 +202,40 @@ formatters.setup {
 --   },
 -- }
 local linters = require "lvim.lsp.null-ls.linters"
+-- local cspell = require('cspell')
 linters.setup {
   {
     name = "cspell",
+    -- sources = {
+    --   cspell.diagnostic.with({
+    --     config = {
+    --       find_json = function()
+    --         return "~/.config/lvim/"
+    --       end
+    --     }
+    --   })
+    -- },
+
     -- Force the severity to be HINT
     diagnostics_postprocess = function(diagnostic)
       diagnostic.severity = vim.diagnostic.severity.HINT
     end,
 
   },
+  -- {
+
+  --   diagnostics_postprocess = function(diagnostic)
+  --     diagnostic.sources = {
+  --       require('cspell').diagnostic.with({
+  --         config = {
+  --           find_json = function()
+  --             return "~/.config/lvim/"
+  --           end
+  --         }
+  --       })
+  --     }
+  --   end
+  -- }
 }
 
 -- Go Specific Settings
@@ -317,9 +338,46 @@ gopher.setup {
 }
 
 
-_G.addCurrentWordToCspell = function()
-  local current_word = vim.fn.expand("<cword>")
-  local command = string.format("solidgo addword %s", current_word)
-  vim.fn.system(command)
-  print("Added '" .. current_word .. "' to cspell.json")
+-- _G.addCurrentWordToCspell = function()
+--   local current_word = vim.fn.expand("<cword>")
+--   local command = string.format("solidgo addword %s", current_word)
+--   vim.fn.system(command)
+--   print("Added '" .. current_word .. "' to cspell.json")
+-- end
+
+-- _G.addCurrentWordToCspell = function()
+--   local git_root = getGitRoot()
+--   if git_root then
+--     local current_word = vim.fn.expand("<cword>")
+--     local command = string.format("cd %s && solidgo addword %s", git_root, current_word)
+--     vim.fn.system(command)
+--     print(string.format("Added '%s' to cspell.json in git repository %s", current_word, git_root))
+--   end
+-- end
+
+-- Define the getGitRoot function in a global scope or before the use
+function getGitRoot()
+  local git_root = vim.fn.trim(vim.fn.system('git rev-parse --show-toplevel'))
+  if vim.v.shell_error ~= 0 then
+    print("Not inside a git repository.")
+    return nil
+  else
+    return git_root
+  end
 end
+
+-- Then define your addCurrentWordToCspell function
+_G.addCurrentWordToCspell = function()
+  local git_root = getGitRoot() -- This should now recognize getGitRoot
+  if git_root then
+    local current_word = vim.fn.expand("<cword>")
+    local command = string.format("cd %s && solidgo addword %s", git_root, current_word)
+    vim.fn.system(command)
+    print(string.format("Added '%s' to cspell.json in git repository %s", current_word, git_root))
+  else
+    print("Operation aborted: Not inside a git repository.")
+  end
+end
+
+-- Assuming you're setting up a keymap for this function
+-- vim.api.nvim_set_keymap('n', '<leader>aw', ':lua _G.addCurrentWordToCspell()<CR>', { noremap = true, silent = true })
