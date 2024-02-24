@@ -100,6 +100,7 @@ lvim.builtin.telescope.on_config_done = function(telescope)
   -- any other extensions loading
 end
 
+lvim.builtin.project.patterns = { ".git" }
 -- Keybindings
 lvim.keys.normal_mode["n"] = [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]]
 lvim.keys.normal_mode["N"] = [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]]
