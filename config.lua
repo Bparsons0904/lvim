@@ -181,7 +181,7 @@ formatters.setup {
     -- options such as `--line-width 80` become either `{"--line-width", "80"}` or `{"--line-width=80"}`
     -- args = { "--print-width", "100" },
     ---@usage only start in these filetypes, by default it will attach to all filetypes it supports
-    filetypes = { "css", "javascript", "typescript", "typescriptreact" },
+    filetypes = { "scss", "css", "javascript", "typescript", "typescriptreact" },
   },
   { command = "goimports", filetypes = { "go" } },
   { command = "gofumpt",   filetypes = { "go" } },
