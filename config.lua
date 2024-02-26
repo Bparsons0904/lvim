@@ -186,11 +186,18 @@ lvim.keys.insert_mode["<Cmd-s>"] = "<C-o>:w<cr><Esc>"
 -- lvim.keys.normal_mode["<F2>"] = ":set spell!<CR>"
 lvim.keys.normal_mode["<leader>lt"] = ":lua _G.addCurrentWordToCspell()<CR>"
 
-lvim.builtin.which_key.mappings["f"] = {
+lvim.builtin.which_key.mappings["sf"] = {
   "<cmd>lua require('telescope.builtin').find_files()<CR>", "Find Files"
 }
+lvim.builtin.which_key.mappings["f"] = {
+  function()
+    require("telescope").extensions.smart_open.smart_open({
+      cwd_only = true,
+    })
+  end, "Smart Open"
+}
 
-lvim.builtin.which_key.mappings["sf"] = {
+lvim.builtin.which_key.mappings["sg"] = {
   "<cmd>lua require('telescope.builtin').git_files()<CR>", "Git Files"
 }
 
