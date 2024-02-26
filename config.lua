@@ -97,9 +97,31 @@ lvim.plugins = {
       -- Toggle previous & next buffers stored within Harpoon list
       vim.keymap.set("n", "<leader><leader>j", function() harpoon:list():prev() end)
       vim.keymap.set("n", "<leader><leader>k", function() harpoon:list():next() end)
+
+      -- Remove the buffer from the list
+      vim.keymap.set("n", "<leader><leader>x", function() harpoon.list:remove() end)
     end,
   },
-}
+  {
+    "danielfalk/smart-open.nvim",
+    branch = "0.2.x",
+    -- config = function()
+    --   require("telescope").load_extension("smart_open")
+    -- end,
+    -- config = function()
+    --   require('telescope').extensions.smart_open.smart_open {
+    --     cwd_only = true,
+    --     filename_first = false,
+    --   }
+    -- end,
+    dependencies = {
+      "kkharji/sqlite.lua",
+      -- Only required if using match_algorithm fzf
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      -- Optional.  If installed, native fzy will be used when match_algorithm is fzy
+      { "nvim-telescope/telescope-fzy-native.nvim" },
+    },
+  } }
 
 -- table.insert(lvim.plugins, {
 --   "zbirenbaum/copilot-cmp",
@@ -119,7 +141,13 @@ lvim.builtin.telescope.on_config_done = function(telescope)
   pcall(telescope.load_extension, "neoclip")
   pcall(telescope.load_extension, "fzf-native")
   -- any other extensions loading
+  pcall(telescope.load_extension, "smart_open")
 end
+
+lvim.builtin.gitsigns.on_config_done = function()
+  require("scrollbar.handlers.gitsigns").setup()
+end
+
 
 lvim.builtin.project.patterns = { ".git" }
 -- Keybindings
@@ -129,7 +157,11 @@ lvim.keys.normal_mode["*"] = [[*<Cmd>lua require('hlslens').start()<CR>]]
 lvim.keys.normal_mode["#"] = [[#<Cmd>lua require('hlslens').start()<CR>]]
 lvim.keys.normal_mode["g*"] = [[g*<Cmd>lua require('hlslens').start()<CR>]]
 lvim.keys.normal_mode["g#"] = [[g#<Cmd>lua require('hlslens').start()<CR>]]
-
+lvim.keys.normal_mode["ss"] = function()
+  require("telescope").extensions.smart_open.smart_open({
+    cwd_only = true,
+  })
+end
 
 
 
