@@ -121,7 +121,15 @@ lvim.plugins = {
       -- Optional.  If installed, native fzy will be used when match_algorithm is fzy
       { "nvim-telescope/telescope-fzy-native.nvim" },
     },
-  } }
+  }
+  ,
+  {
+    "olrtg/nvim-emmet",
+    config = function()
+      vim.keymap.set({ "n", "v" }, '<leader>xe', require('nvim-emmet').wrap_with_abbreviation)
+    end,
+  }
+}
 
 -- table.insert(lvim.plugins, {
 --   "zbirenbaum/copilot-cmp",
