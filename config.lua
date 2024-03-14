@@ -374,6 +374,8 @@ lsp_manager.setup("gopls", {
     map("n", "<leader>Cf", "<cmd>GoGenerate %<Cr>", "Go Generate File")
     map("n", "<leader>Cc", "<cmd>GoCmt<Cr>", "Generate Comment")
     map("n", "<leader>DT", "<cmd>lua require('dap-go').debug_test()<cr>", "Debug Test")
+    map("n", "<leader>Gc", "<cmd>lua vim.lsp.codelens.run()<CR>",
+      { silent = true, noremap = true, desc = "Toggle gc details" })
   end,
   on_init = require("lvim.lsp").common_on_init,
   capabilities = require("lvim.lsp").common_capabilities(),
@@ -389,6 +391,14 @@ lsp_manager.setup("gopls", {
       },
     },
   },
+})
+
+vim.diagnostic.config({
+  virtual_text = true,      -- Show diagnostics as inline text (this is likely what you want for an inline experience)
+  signs = true,             -- Show signs in the sign column to the left of the text
+  underline = true,         -- Underline the text where diagnostics occur
+  update_in_insert = false, -- Update diagnostics while in insert mode (might be distracting)
+  severity_sort = true,     -- Sort diagnostics by severity
 })
 
 local status_ok, gopher = pcall(require, "gopher")
