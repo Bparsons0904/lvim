@@ -128,6 +128,9 @@ lvim.plugins = {
     config = function()
       vim.keymap.set({ "n", "v" }, '<leader>xe', require('nvim-emmet').wrap_with_abbreviation)
     end,
+  },
+  {
+    "joerdav/templ.vim"
   }
 }
 
@@ -226,7 +229,7 @@ lvim.builtin.treesitter.ensure_installed = {
   "java",
   "yaml",
   "go",
-  "gomod"
+  "gomod",
 }
 lvim.builtin.treesitter.highlight.enabled = true
 lvim.transparent_window = true
@@ -254,6 +257,8 @@ formatters.setup {
   { command = "goimports", filetypes = { "go" } },
   { command = "gofumpt",   filetypes = { "go" } },
 }
+
+-- vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = vim.lsp.buf.format })
 
 -- local linters = require "lvim.lsp.null-ls.linters"
 -- linters.setup {
@@ -416,7 +421,35 @@ gopher.setup {
   },
 }
 
+lsp_manager.setup("templ", {
+  on_init = require("lvim.lsp").common_on_init,
+  capabilities = require("lvim.lsp").common_capabilities(),
+})
+vim.filetype.add({ extension = { templ = "templ" } })
+lsp_manager.setup("htnl", {
+  on_attach = require("lvim.lsp").common_on_init,
+  capabilities = require("lvim.lsp").common_capabilities(),
+  filetypes = { "html", "templ" },
+})
+local custom_format = function()
+  if vim.bo.filetype == "templ" then
+    local bufnr = vim.api.nvim_get_current_buf()
+    local filename = vim.api.nvim_buf_get_name(bufnr)
+    local cmd = "templ fmt " .. vim.fn.shellescape(filename)
 
+    vim.fn.jobstart(cmd, {
+      on_exit = function()
+        -- Reload the buffer only if it's still the current buffer
+        if vim.api.nvim_get_current_buf() == bufnr then
+          vim.cmd('e!')
+        end
+      end,
+    })
+  else
+    vim.lsp.buf.format()
+  end
+end
+vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = custom_format })
 -- _G.addCurrentWordToCspell = function()
 --   local current_word = vim.fn.expand("<cword>")
 --   local command = string.format("solidgo addword %s", current_word)
